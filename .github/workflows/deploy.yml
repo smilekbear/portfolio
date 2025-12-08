@@ -30,7 +30,7 @@ jobs:
             git pull origin main
 
           
-            pnpm install --frozen-lockfile
+            pnpm install --only=production
             pnpm build
 
           
