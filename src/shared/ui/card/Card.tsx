@@ -1,21 +1,7 @@
 'use client';
-
 import React, { useMemo } from "react";
 import Image from "next/image";
-
-interface CardProps {
-    fullTitle: string;
-    thumbnail: string;
-    title: string;
-    category: string;
-    projectInfo: string;
-    image: string[];
-    skills: string[];
-    date: string;
-    avatars: string[];
-    votes?: number;
-    review: string;
-}
+import {ProjectDto} from "@/entities/dto/portfolio/portfolioDto";
 
 // --- 컴포넌트 밖으로 뺀 유틸 함수들 ---
 function getContrastYIQ(r: number, g: number, b: number): string {
@@ -32,23 +18,11 @@ function getRandomRGBColor(): { bg: string; text: string } {
     return { bg, text };
 }
 
-const Card: React.FC<CardProps> = ({
-                                       fullTitle,
-                                       title,
-                                       category,
-                                       projectInfo,
-                                       image,
-                                       date,
-                                       thumbnail,
-                                       skills,
-                                       avatars,
-                                       votes = 0,
-                                       review,
-                                   }) => {
+const Card: React.FC<ProjectDto> = (projectDto : ProjectDto) => {
     // skills가 바뀔 때만 랜덤 색상 배열 생성
     const skillColors = useMemo(
-        () => skills.map(() => getRandomRGBColor()),
-        [skills]
+        () => projectDto.skills.map(() => getRandomRGBColor()),
+        [projectDto.skills]
     );
 
     const handleClickItem = () => {
@@ -65,7 +39,7 @@ const Card: React.FC<CardProps> = ({
             {/* <img> 대신 Next Image */}
             <Image
                 className="w-full h-[180px] object-cover"
-                src={thumbnail}
+                src={projectDto.thumbnailUrl}
                 alt="thumbnail"
                 width={320}
                 height={180}
@@ -73,11 +47,11 @@ const Card: React.FC<CardProps> = ({
 
             <div className="flex flex-col px-[20px] pt-[20px] gap-[14px]">
                 <h3 className="font-[16px] text-[#121212]">
-                    {title} | <span>{category}</span>
+                    {projectDto.title} | <span>{projectDto.category}</span>
                 </h3>
 
                 <div className="flex gap-[10px] flex-wrap">
-                    {skills.map((item, index) => {
+                    {projectDto.skills.map((item, index) => {
                         const color = skillColors[index];
 
                         return (
@@ -99,7 +73,7 @@ const Card: React.FC<CardProps> = ({
                     })}
                 </div>
 
-                <p className="card-date">{date}</p>
+                <p className="card-date">{projectDto.dateRange}</p>
 
                 <div className="flex items-center justify-end px-[12px] py-[16px]">
                     <div className="vote-section">
