@@ -1,4 +1,4 @@
-name: Deploy to EC2 (SSM)
+name: Deploy via SSM (server build)
 
 on:
   push:
@@ -11,89 +11,31 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    env:
+      AWS_REGION: ap-northeast-2
+      INSTANCE_ID: i-08bf99a0d6dc02e0d
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Configure AWS credentials (OIDC)
+      - name: Configure AWS (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-          aws-region: ap-northeast-2
+          role-to-assume: arn:aws:iam::YOUR_ACCOUNT_ID:role/YOUR_GITHUB_ASSUME_ROLE
+          aws-region: ${{ env.AWS_REGION }}
 
-      - name: Deploy via SSM Run Command
+      - name: Deploy on EC2 via SSM (git pull + build + pm2 reload)
         run: |
-          COMMAND_ID=$(aws ssm send-command \
-            --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
+          aws ssm send-command \
+            --instance-ids "${INSTANCE_ID}" \
             --document-name "AWS-RunShellScript" \
-            --comment "Deploy portfolio from GitHub Actions" \
             --parameters commands='[
-              "set -e",
-              "cd /home/ubuntu/portfolio",
-              "export PNPM_HOME=\"$HOME/.local/share/pnpm\"",
-              "export PATH=\"$PNPM_HOME:$PATH\"",
-              "git pull",
+              "set -euo pipefail",
+              "APP=/home/ubuntu/portfolio",
+              "cd $APP",
+              "git fetch --all",
+              "git reset --hard origin/main",
               "pnpm install --frozen-lockfile",
               "pnpm build",
-              "pm2 reload portfolio || pm2 start ecosystem.config.js",
-              "pm2 save"
-            ]' \
-            --query "Command.CommandId" \
-            --output text)
-
-          echo "SSM CommandId: $COMMAND_ID"
-
-          # Wait until the command finishes
-          aws ssm wait command-executed \
-            --command-id "$COMMAND_ID" \
-            --instance-id "${{ secrets.EC2_INSTANCE_ID }}"
-
-          # Print output
-          aws ssm get-command-invocation \
-            --command-id "$COMMAND_ID" \
-            --instance-id "${{ secrets.EC2_INSTANCE_ID }}" \
-            --query "{Status:Status, Stdout:StandardOutputContent, Stderr:StandardErrorContent}" \
-            --output json
-#name: Deploy to EC2
-#
-#on:
-#  push:
-#    branches: [ "main" ]
-#
-#jobs:
-#  deploy:
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: Checkout Code
-#        uses: actions/checkout@v4
-#
-#      - name: Setup SSH
-#        run: |
-#          mkdir -p ~/.ssh
-#          echo "${{ secrets.DEPLOY_KEY }}" > ~/.ssh/id_ed25519
-#          chmod 600 ~/.ssh/id_ed25519
-#          ssh-keyscan -H ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
-#
-#      - name: Deploy to EC2
-#        run: |
-#          ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} << 'EOF'
-#            set -e
-#
-#            cd /home/ubuntu/portfolio
-#
-#            # pnpm PATH 잡아주기 (서버에서 pnpm 설치 경로 기준)
-#            export PNPM_HOME="$HOME/.local/share/pnpm"
-#            export PATH="$PNPM_HOME:$PATH"
-#
-#            git pull
-#
-#            pnpm install --frozen-lockfile
-#            pnpm build
-#
-#            # pm2로 무중단 재시작 (있으면 reload, 없으면 start)
-#            pm2 reload portfolio || pm2 start ecosystem.config.js
-#
-#            pm2 save
-#          EOF
+              "cd $APP/.next/standalone",
+              "pm2 reload portfolio --update-env || pm2 restart portfolio --update-env",
+              "pm2 save",
+              "echo DEPLOY_OK"
+            ]'
