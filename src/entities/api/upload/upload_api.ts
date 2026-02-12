@@ -1,5 +1,5 @@
 import {api, HttpResponse} from "@/shared/api/http";
-import {UploadUrlDto, UploadUrlResponse} from "@/entities/dto/upload/upload_url_dto";
+import {UploadUrlDto} from "@/entities/dto/upload/upload_url_dto";
 
 export function fetchGetUploadUrlApi(
     contentType : string,

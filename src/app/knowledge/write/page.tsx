@@ -10,9 +10,6 @@ import type ReactQuill from "react-quill-new";
 
 const QuillEditor = dynamic(() => import("react-quill-new"), { ssr: false }) as unknown as typeof ReactQuill;
 
-// next/dynamic components don't type `ref` well; use an `any` alias only where we need refs
-const QuillEditorWithRef = QuillEditor as unknown;
-
 type Category = { id: string; name: string };
 const CATEGORIES: Category[] = [
     { id: "1", name: "Android" },
@@ -44,7 +41,7 @@ export default function WritePage() {
         if(writeState.httpStatusCode === 201){router.back()}
     }, [writeState]);
 
-    const createImageId = () => crypto.randomUUID();
+    // const createImageId = () => crypto.randomUUID();
 
     const imageHandler = useCallback(() => {
         const input = document.createElement("input");
@@ -66,7 +63,7 @@ export default function WritePage() {
             const reader = new FileReader();
             reader.onload = () => {
                 const editor = bodyQuillRef.current?.getEditor?.();
-                const imageId = createImageId();
+                // const imageId = createImageId();
 
                 if (!editor) return;
 
@@ -118,7 +115,7 @@ export default function WritePage() {
         const hasText = text.length > 0
         console.log(`content has Text ${hasText}`)
 
-        const hasImage = doc.body.querySelector("img") !== null
+        // const hasImage = doc.body.querySelector("img") !== null
         doc.querySelectorAll("img").forEach((img) => img.remove());
 
         const summaryText = (doc.body.textContent ?? "")

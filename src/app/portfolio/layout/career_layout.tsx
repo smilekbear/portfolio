@@ -192,7 +192,7 @@ export const CareerLayout = ({careers} : CareerType) => {
     }
     return (
       <div
-          className={'flex flex-col max-w-[1400px] w-[1400px] gap-[40px] items-center'}>
+          className={'flex flex-col pt-[120px] max-w-[1400px] w-[1400px] gap-[40px] items-center'}>
 
           <div
               className={"text-[48px] font-bold text-black"}>

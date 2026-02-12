@@ -35,25 +35,17 @@ const Page = () => {
             window.history.replaceState(null, "", window.location.pathname + window.location.search);
         }
     }, []);
+    const didFetchRef = useRef(false);
+    useEffect(() => {
+        if (didFetchRef.current) return;
+        didFetchRef.current = true;
+        reFetch();
+    }, [reFetch]);
 
     useEffect(() => {
-        reFetch();
-
-        const target = document.getElementById("root");     //id가 root인 컴포넌트를 찾음
-        if (!target) return;
-
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                setIsOnHero(entry.isIntersecting);
-            },
-            {
-                threshold: 0.3,
-            }
-        );
-
-        observer.observe(target);
-        return () => observer.disconnect();
-    }, []);
+        const currentId = SECTION_IDS[currentIndex];
+        setIsOnHero(currentId === "root" || currentId === "skills" || currentId === "projects");
+    }, [currentIndex]);
 
     useEffect(() => {
         const elements = SECTION_IDS.map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[];
@@ -120,15 +112,20 @@ const Page = () => {
     }, [currentIndex, scrollToId]);
 
     const getNavTextColor = (id: SectionId) => {
-        if (isOnHero) return "text-white";
+        const currentSection = SECTION_IDS[currentIndex];
+        const isActive = currentSection === id;
 
-        const isActive = SECTION_IDS[currentIndex] === id;
-
-        if (isActive) {
-            return "text-[#1E35FF]";
+        if (currentSection === "root") {
+            return "text-white";
         }
 
-        return "text-black/30 hover:text-[#1E35FF] hover:opacity-100";
+        if (currentSection === "skills" || currentSection === "projects") {
+            return isActive ? "text-white" : "text-white opacity-30";
+        }
+
+        return isActive
+            ? "text-[#1E35FF]"
+            : "text-black/30 hover:text-[#1E35FF] hover:opacity-100";
     };
 
     return (
@@ -146,18 +143,17 @@ const Page = () => {
                         type="button"
                         onClick={() => scrollToId("root")}
                         className={"flex min-w-0"}>
-                        <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg width="86" height="24" viewBox="0 0 86 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
-                                d="M52.7759 38.52C52.7759 36.9129 54.0787 35.61 55.6859 35.61C57.293 35.61 58.5959 36.9129 58.5959 38.52V38.58C58.5959 40.1871 57.293 41.49 55.6859 41.49C54.0787 41.49 52.7759 40.1871 52.7759 38.58V38.52Z"
+                                d="M75.6589 16.4883C69.1758 16.4883 65.25 13.3477 65.25 8.25537C65.25 3.20793 69.1758 0 75.6589 0C81.8505 0 86.0006 3.20793 86.0006 8.25537C86.0006 13.3477 81.8729 16.4883 75.6589 16.4883ZM75.6589 14.0431C80.4821 14.0431 83.3086 11.8671 83.3086 8.25537C83.3086 4.68851 80.4596 2.42277 75.6589 2.42277C70.8134 2.42277 67.9195 4.68851 67.9195 8.25537C67.9195 11.8671 70.8134 14.0431 75.6589 14.0431ZM71.3518 12.1139V4.03795H77.5209C79.6969 4.03795 81.0429 5.13717 81.0429 6.86452C81.0429 8.12077 80.4147 9.01809 79.4277 9.44432L81.1775 12.1139H77.8798L76.6011 9.98271H74.0438V12.0017L71.3518 12.1139ZM77.0722 7.85157C77.8349 7.85157 78.2612 7.53751 78.2612 7.02155C78.2612 6.50559 77.8349 6.21396 77.0722 6.21396H74.0438V7.85157H77.0722Z"
                                 fill={isOnHero ? 'white' : 'black'}/>
                             <path
-                                d="M48.9403 20.7V39.3L50.5003 41.25H40.8103L42.6103 39.3V29.61H35.1703V39.3L36.9703 41.25H27.2803L28.8403 39.3V20.7L27.2803 18.75H36.9703L35.1703 20.7V28.95H42.6103V20.7L40.8103 18.75H50.5003L48.9403 20.7Z"
+                                d="M54.3516 23.9991V15.2983H40.0717V23.9991H32.2676V0.088623H40.0717V8.78937H54.3516V0.088623H62.1557V23.9991H54.3516Z"
                                 fill={isOnHero ? 'white' : 'black'}/>
                             <path
-                                d="M11.4 18.75C19.35 18.75 25.14 23.49 25.14 29.79C25.14 36.33 19.35 41.25 11.4 41.25H1.5L3.06 39.15V20.85L1.5 18.75H11.4ZM11.01 40.59C15.36 40.59 18.36 36.15 18.36 29.79C18.36 23.67 15.36 19.41 11.04 19.41H9.39V40.59H11.01Z"
+                                d="M0 23.9991V0.088623H17.0362C23.9437 0.088623 28.9582 5.10318 28.9582 12.0106C28.9582 18.9513 23.9437 23.9991 17.0362 23.9991H0ZM7.80411 17.4237H13.8814C18.597 17.4237 20.8884 15.6304 20.8884 12.0106C20.8884 8.45729 18.597 6.664 13.8814 6.664H7.80411V17.4237Z"
                                 fill={isOnHero ? 'white' : 'black'}/>
                         </svg>
-
                     </button>
 
 
@@ -169,18 +165,6 @@ const Page = () => {
                             "flex items-center cursor-pointer border-b border-transparent hover:border-b gap-[8px]",
                             isOnHero ? "hover:border-white" : "hover:border-black",
                         ].join(" ")}>
-
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <mask id="mask0_1947_1014"   style={{ maskType: "alpha" }} maskUnits="userSpaceOnUse" x="0" y="0"
-                                  width="24" height="24">
-                                <rect width="24" height="24" fill="#D9D9D9"/>
-                            </mask>
-                            <g mask="url(#mask0_1947_1014)">
-                                <path
-                                    d="M2 20V18H22V20H2ZM4 16V8H6V16H4ZM8 16V4H10V16H8ZM12 16V4H14V16H12ZM19 16L15 9L16.75 8L20.75 15L19 16Z"
-                                    fill={isOnHero ? '#FFFFFF' : "#1C1B1F"}/>
-                            </g>
-                        </svg>
 
                         <svg width="92" height="32" viewBox="0 0 92 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -236,7 +220,7 @@ const Page = () => {
 
             <div
                 id={"projects"}
-                className={'flex w-full min-h-screen py-[50px] bg-white'}>
+                className={'flex w-full min-h-screen py-[50px] bg-black'}>
                 <ProjectLayout projects={data?.data.projects}/>
             </div>
 
