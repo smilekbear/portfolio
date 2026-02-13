@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useMemo, useState} from "react";
 import Image from "next/image";
 import { KnowledgeItemDto } from "@/entities/dto/knowledge/KnowledgeDto";
 import Link from "next/link";
@@ -9,20 +9,20 @@ type Props = {
 
 const KnowledgeList = ({ knowledgeItemDto }: Props) => {
     const [imageError, setImageError] = useState(false);
-    // const getEllipsisTextFromHtml = (html: string, maxLength: number) => {
-    //     // HTML → text
-    //     const text = html
-    //         .replace(/<[^>]*>/g, "")      // 태그 제거
-    //         .replace(/\s+/g, " ")         // 공백 정리
-    //         .trim();
-    //
-    //     if (text.length <= maxLength) return text;
-    //     return text.slice(0, maxLength) + "...";
-    // }
+    const getEllipsisTextFromHtml = (html: string, maxLength: number) => {
+        // HTML → text
+        const text = html
+            .replace(/<[^>]*>/g, "")      // 태그 제거
+            .replace(/\s+/g, " ")         // 공백 정리
+            .trim();
 
-    // const summaryText = useMemo(() => {
-    //     return getEllipsisTextFromHtml(knowledgeItemDto.summary, 400);
-    // }, [knowledgeItemDto.summary]);
+        if (text.length <= maxLength) return text;
+        return text.slice(0, maxLength) + "...";
+    }
+
+    const summaryText = useMemo(() => {
+        return getEllipsisTextFromHtml(knowledgeItemDto.summary, 400);
+    }, [knowledgeItemDto.summary]);
 
     return (
         <Link
@@ -35,7 +35,7 @@ const KnowledgeList = ({ knowledgeItemDto }: Props) => {
 
                     <p className="text-[14px] font-normal line-clamp-2"
                        dangerouslySetInnerHTML={{__html : knowledgeItemDto.summary}}/>
-                    {/*<p>{summaryText}</p>*/}
+                    <p>{summaryText}</p>
 
                 </div>
 
