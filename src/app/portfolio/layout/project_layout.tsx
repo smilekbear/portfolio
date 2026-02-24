@@ -13,7 +13,6 @@ export const ProjectLayout = ({projects, onProjectPopUpOpen} : ProjectType) => {
                     <div className={'flex w-full justify-center items-center'}>
                         {/*<HeroCoverflowCarousel projectDto={projects}/>*/}
                         <GridCardComponent items={projects} onPopUpOpen={(open) => {
-                            console.log(`onPopUpOpen2 :: ${open}`)
                             onProjectPopUpOpen(open)
                         }}/>
                     </div>

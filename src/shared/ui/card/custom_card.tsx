@@ -6,30 +6,30 @@ type CustomCardProps = {
 }
 export const CustomCard = (item:CustomCardProps) => {
     return (
-        <div className={"flex flex-col w-full  h-full items-center px-[40px] pt-[48px] pb-[72px] gap-[37px] rounded-[30px] bg-black/10 backdrop-blur-[50px]"}>
+        <div className={"flex flex-col w-[14.58vw]  min-h-[51.67vh] items-center px-[2.08vw] pt-[4.44vh] pb-[6.67vh] gap-[3.43vh] rounded-[30px] bg-black/10 backdrop-blur-[50px]"}>
 
-            <div className={'flex flex-col w-full gap-[1rem]'}>
+            <div className={'flex flex-col w-full gap-[1.48vh] items-center'}>
                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <clipPath clipPath="url(#clip0_2616_596)">
-                        <rect width="32" height="32" rx="6.4" fill="#1E35FF"/>
-                        <clipPath clipPath="url(#clip1_2616_596)">
-                            <path
-                                d="M11.8999 11.9004V10.3449C11.0408 10.3449 10.3444 11.0413 10.3444 11.9004H11.8999ZM12.0361 11.9004H13.5916C13.5916 11.0413 12.8952 10.3449 12.0361 10.3449V11.9004ZM20.0989 11.9004V10.3449C19.2398 10.3449 18.5434 11.0413 18.5434 11.9004H20.0989ZM20.2199 11.9004H21.7755C21.7755 11.0413 21.079 10.3449 20.2199 10.3449V11.9004ZM12.0361 12.0099V13.5654C12.8952 13.5654 13.5916 12.869 13.5916 12.0099H12.0361ZM11.8999 12.0099H10.3444C10.3444 12.869 11.0408 13.5654 11.8999 13.5654V12.0099ZM20.2199 12.0099V13.5654C21.079 13.5654 21.7755 12.869 21.7755 12.0099H20.2199ZM20.0989 12.0099H18.5434C18.5434 12.869 19.2398 13.5654 20.0989 13.5654V12.0099ZM12.5848 19.3364L11.7661 18.0137L9.12078 19.6512L9.93951 20.9739L11.2622 20.1551L12.5848 19.3364ZM22.0593 20.9739L22.8781 19.6512L20.2327 18.0137L19.414 19.3364L20.7367 20.1551L22.0593 20.9739ZM29.6644 15.9999H28.1088C28.1088 22.6877 22.6873 28.1093 15.9994 28.1093V29.6649V31.2204C24.4055 31.2204 31.2199 24.406 31.2199 15.9999H29.6644ZM15.9994 29.6649V28.1093C9.31159 28.1093 3.89003 22.6877 3.89003 15.9999H2.33447H0.778917C0.778917 24.406 7.59337 31.2204 15.9994 31.2204V29.6649ZM2.33447 15.9999H3.89003C3.89003 9.31208 9.31159 3.89052 15.9994 3.89052V2.33496V0.779405C7.59337 0.779405 0.778917 7.59386 0.778917 15.9999H2.33447ZM15.9994 2.33496V3.89052C22.6873 3.89052 28.1088 9.31208 28.1088 15.9999H29.6644H31.2199C31.2199 7.59386 24.4055 0.779405 15.9994 0.779405V2.33496ZM11.8999 11.9004V13.456H12.0361V11.9004V10.3449H11.8999V11.9004ZM20.0989 11.9004V13.456H20.2199V11.9004V10.3449H20.0989V11.9004ZM12.0361 11.9004H10.4805V12.0099H12.0361H13.5916V11.9004H12.0361ZM12.0361 12.0099V10.4543H11.8999V12.0099V13.5654H12.0361V12.0099ZM11.8999 12.0099H13.4555V11.9004H11.8999H10.3444V12.0099H11.8999ZM20.2199 11.9004H18.6644V12.0099H20.2199H21.7755V11.9004H20.2199ZM20.2199 12.0099V10.4543H20.0989V12.0099V13.5654H20.2199V12.0099ZM20.0989 12.0099H21.6545V11.9004H20.0989H18.5434V12.0099H20.0989ZM15.9994 22.8323V21.2768C14.5824 21.2768 13.317 20.5192 12.5848 19.3364L11.2622 20.1551L9.93951 20.9739C11.2 23.0101 13.4332 24.3879 15.9994 24.3879V22.8323ZM20.7367 20.1551L19.414 19.3364C18.6818 20.5192 17.4164 21.2768 15.9994 21.2768V22.8323V24.3879C18.5656 24.3879 20.7989 23.0101 22.0593 20.9739L20.7367 20.1551Z"
-                                fill="white"/>
-                        </clipPath>
-                    </clipPath>
+                    <g clip-path="url(#clip0_2720_1153)">
+                        <path
+                            d="M16 30.5C24.0081 30.5 30.5 24.0081 30.5 16C30.5 7.99187 24.0081 1.5 16 1.5C7.99187 1.5 1.5 7.99187 1.5 16C1.5 24.0081 7.99187 30.5 16 30.5Z"
+                            stroke="white" stroke-width="2.175" stroke-linecap="square"/>
+                        <path d="M10.1992 11.7224V11.5774M21.7992 11.7224V11.5774" stroke="white" stroke-width="2.175"
+                              stroke-linecap="square"/>
+                        <path
+                            d="M21.7992 18.8999C21.0742 21.0749 19.2037 23.2499 15.9992 23.2499C12.7947 23.2499 10.9242 21.0749 10.1992 18.8999"
+                            stroke="white" stroke-width="2.175" stroke-linecap="square"/>
+                    </g>
                     <defs>
-                        <clipPath id="clip0_2616_596">
-                            <rect width="32" height="32" rx="6.4" fill="white"/>
-                        </clipPath>
-                        <clipPath id="clip1_2616_596">
+                        <clipPath id="clip0_2720_1153">
                             <rect width="32" height="32" fill="white"/>
                         </clipPath>
                     </defs>
                 </svg>
 
-                <div className={"flex w-full justify-center gap-[16px] w-full pb-[20px] border-b"}>
-                    <p className={"text-[32px] font-bold text-white"}>{item.title}</p>
+
+                <div className={"flex w-full justify-center gap-[1.48vh] pb-[2.22vh] border-b border-white/20"}>
+                    <p className={"text-[1.67vw] font-bold text-white"}>{item.title}</p>
                 </div>
 
             </div>
@@ -37,8 +37,8 @@ export const CustomCard = (item:CustomCardProps) => {
 
             <div className={"flex flex-col items-center gap-[24px]"}>
                 {item.value.map((v, i) => (
-                    <div key={`${v}-${i}`} className={'flex items-center gap-[18px] text-white'}>
-                        <span className={"text-[20px] font-semibold"}>{v}</span>
+                    <div key={`${v}-${i}`} className={'flex items-center gap-[1.67vh] text-white'}>
+                        <span className={"text-[1.04vw] font-light"}>{v}</span>
                     </div>
                 ))}
             </div>
