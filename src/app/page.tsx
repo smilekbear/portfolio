@@ -17,6 +17,7 @@ const Page = () => {
     const [isOnHero, setIsOnHero] = useState(true);
     const [currentIndex, setCurrentIndex] = useState(0);
     const { data, reFetch } = usePortfolio();
+    const [isScrollAvailable, setScrollAvailable] = useState(true)
     const NAV_ITEMS: { id: SectionId; label: string }[] = [
         { id: "about", label: "About" },
         { id: "skills", label: "Skills" },
@@ -79,6 +80,12 @@ const Page = () => {
 
     useEffect(() => {
         const onWheel = (e: WheelEvent) => {
+
+            if (!isScrollAvailable) {
+                e.preventDefault();
+                return;
+            }
+
             // Always prevent native scrolling for full-page navigation
             e.preventDefault();
 
@@ -109,7 +116,7 @@ const Page = () => {
 
         window.addEventListener("wheel", onWheel, { passive: false });
         return () => window.removeEventListener("wheel", onWheel);
-    }, [currentIndex, scrollToId]);
+    }, [currentIndex, scrollToId, isScrollAvailable]);
 
     const getNavTextColor = (id: SectionId) => {
         const currentSection = SECTION_IDS[currentIndex];
@@ -135,7 +142,7 @@ const Page = () => {
 
             <div
                 key={"header"}
-                className={'fixed top-0 left-0 flex  w-full z-50 items-center justify-start px-[100px] py-[40px]'}>
+                className={'fixed top-0 left-0 flex  w-full z-50 items-center justify-start px-[5.21%] py-[3.7%]'}>
 
                 <div
                     className={"flex w-full justify-between items-center"}>
@@ -207,35 +214,30 @@ const Page = () => {
 
             <div
                 id={"about"}
-                className={`flex flex-col min-h-screen px-[100px] py-[50px] gap-[40px] bg-white items-center`}>
+                className={`flex flex-col min-h-screen pt-[10.65%] px-[160px] bg-white items-center`}>
                 <AboutLayout/>
             </div>
 
             <div
-            id={"skills"}
-            className={"flex w-full h-screen bg-white"}>
-                <SkillsLayout skills={data?.data.skills}/>
+                id={"skills"}
+                className={"flex w-full h-screen bg-white"}>
+                <SkillsLayout skills={data?.data?.skills}/>
             </div>
 
 
             <div
                 id={"projects"}
                 className={'flex w-full min-h-screen py-[50px] bg-black'}>
-                <ProjectLayout projects={data?.data.projects}/>
+                <ProjectLayout projects={data?.data?.projects} onProjectPopUpOpen={(open) => {
+                    console.log(`onPopUpOpene3 :: ${open}`)
+                    setScrollAvailable(!open)}
+                }/>
             </div>
 
             <div
                 id={"career"}
-                className={'flex w-full flex-col min-h-screen py-[50px] bg-[#F3F6Fc] items-center'}>
-                <CareerLayout careers={data?.data.careers}/>
-                {/*<div className="relative w-[360px] h-[800] overflow-hidden rounded-3xl shadow-xl">*/}
-                {/*    <iframe*/}
-                {/*        title="Figma Prototype"*/}
-                {/*        style={{border: "1px solid rgba(0,0,0,0.1)", width: "100%", height: "100%"}}*/}
-                {/*        src="https://www.figma.com/embed?embed_host=share&url=https://www.figma.com/proto/Il8NKCcN1qhvJXdhlnxpZQ/%ED%94%84%EB%A1%9C%ED%86%A0%ED%83%80%EC%9E%85?page-id=1%3A2&node-id=424-18915&viewport=469%2C438%2C0.32&t=Vkzt7PEnBBV0Yl47-1&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=424%3A18915&show-proto-sidebar=1&hide-ui=1"*/}
-                {/*        allowFullScreen*/}
-                {/*    />*/}
-                {/*</div>*/}
+                className={'flex w-full flex-col min-h-screen bg-[#F3F6Fc] items-center'}>
+                <CareerLayout careers={data?.data?.careers}/>
             </div>
 
         </div>

@@ -16,6 +16,8 @@ export type ProjectDto = {
   thumbnailUrl: string;
   skills: string[];
   review: string;
+  major : string;
+  organization : string;
 };
 
 export type CareerDto = {

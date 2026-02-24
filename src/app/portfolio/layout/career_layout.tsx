@@ -1,5 +1,6 @@
 import React, {ReactNode} from 'react';
 import {CareerDto} from "@/entities/dto/portfolio/portfolioDto";
+import {cn} from "@/lib/utils";
 
 export type CareerType = {
     careers? : CareerDto[]
@@ -190,58 +191,75 @@ export const CareerLayout = ({careers} : CareerType) => {
                 </svg>
         }
     }
+    const parsePeriod = (period?: string) => {
+        if (!period) return { start: "", end: "" };
+
+        const cleaned = period.replace(/\s+/g, ""); // 공백 제거
+        const [start = "", end = ""] = cleaned.split("~"); // ~ 기준 분리
+
+        return { start, end };
+    };
+
     return (
-      <div
-          className={'flex flex-col pt-[120px] max-w-[1400px] w-[1400px] gap-[40px] items-center'}>
+        <div className={'flex w-full h-screen pt-[17.59vh] bg-white'}>
+            <div className={'flex w-full flex-col gap-[3.7vh] px-[8.33vw]'}>
+                <div className={'flex w-full justify-between items-end'}>
+                    <p className={'text-[5.21vw] font-bold leading-none tracking-[-0.02em]'}>Career</p>
+                    <p className={'text-[0.94vw] font-normal leading-[1.8] tracking-[-0.04em]'}>*각 회사와 직무에서 수행한 역할과 핵심 성과 기술입니다.</p>
+                </div>
 
-          <div
-              className={"text-[48px] font-bold text-black"}>
-              Career
-          </div>
+                <div className={'flex w-full flex-col border-t border-black'}>
 
-          <div
-              className={'flex w-full gap-[50px] mt-[60px] mx-[300px]'}>
+                    {
+                        careers?.map((item, index) => (
+                            <div
+                                key={item.title}
+                                className={cn('flex w-full gap-[2.08vw] py-[4.63vh]',
+                                index !== (careers?.length ?? 0) - 1 && 'border-b border-[#DDDDDD]')}>
+                                <div className={'flex flex-col leading-none gap-[2.78vh] min-w-[20.83vw] min-h-[21.3vh]'}>
+                                    <p className={'text-[1.25vw] font-bold text-black leading-1 tracking-[-0.02em]'}>{item.title}</p>
+                                    {(() => {
+                                        const { start, end } = parsePeriod(item.period);
 
-              {
-                  careers?.map((item, index) => (
-                      <div
-                          key={index}
-                          className={'flex w-full flex-col flex-1 bg-[#E8ECF5] rounded-[10px] p-[20px]'}>
-                          <div
-                              className={'font-[14px] text-[#575757]'}>
-                              {item.period}
-                          </div>
-                          <p className={'font-[18px] mt-[20px] text-black'}>{item.title}</p>
-                          <p className={'font-[14px] mt-[10px] mb-[20px] text-black'}>{item.subTitle}</p>
-                          {
-                              item.works.map((item, index) => (
-                                  <div
-                                      key={index}>
-                                      <div
-                                          className={'flex font-[12px] text-[#575757] mt-[10px]'}>
-                                          {item}
-                                      </div>
-                                  </div>
-                              ))
-                          }
-                          <div
-                              className={'flex mt-[80px] gap-[20px]'}>
-                              {
-                                  item.skills.map((item, index) => (
-                                      <div
-                                          key={index}
-                                          className={'flex w-[48px] h-[48px] bg-[#F3F6FC] rounded-[10px] items-center justify-center'}>
-                                          {skillIconWidget(item)}
-                                      </div>
-                                  ))
-                              }
-                          </div>
+                                        return (
+                                            <p className="text-[2.5vw] font-bold text-[#1E35FF] leading-[1.3] tracking-[0]">
+                                                {start}<br />- {end}
+                                            </p>
+                                        );
+                                    })()}
+                                </div>
 
-                      </div>
-                  ))
-              }
-          </div>
+                                <div className={'flex flex-col justify-between h-full w-[40.94vw]'}>
+                                    <p className={'text-[1.25vw] leading-[1.5] tracking-[-0.02em]'}>{item.subTitle}</p>
 
-      </div>
-  );
+                                    <div className={'flex flex-col w-full'}>
+                                        {
+                                            item.works.map((item, index) => (
+                                                <p key={item} className={'text-[1.04vw] text-[#777777] leading-[1.8] tracking-[-0.04em]'}>- {item}</p>
+                                            ))
+                                        }
+                                    </div>
+                                </div>
+
+                                <div className={'grid grid-cols-3 gap-[10px]'}>
+                                    {
+                                        item.skills.map((item, index) => (
+                                            <div
+                                                key={item}
+                                                className={'flex justify-center items-center w-[3.75vw] h-[6.67vh] rounded-full bg-[#F5F5FC] px-[0.94vw] py-[1.67vh]'}>
+                                                {skillIconWidget(item)}
+                                            </div>
+                                        ))
+                                    }
+                                </div>
+
+                            </div>
+                        ))
+                    }
+
+
+                </div>
+            </div>
+        </div>
+    )
 }
