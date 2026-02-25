@@ -10,15 +10,15 @@ export const CustomCard = (item:CustomCardProps) => {
 
             <div className={'flex flex-col w-full gap-[1.48vh] items-center'}>
                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <g clip-path="url(#clip0_2720_1153)">
+                    <g clipPath="url(#clip0_2720_1153)">
                         <path
                             d="M16 30.5C24.0081 30.5 30.5 24.0081 30.5 16C30.5 7.99187 24.0081 1.5 16 1.5C7.99187 1.5 1.5 7.99187 1.5 16C1.5 24.0081 7.99187 30.5 16 30.5Z"
-                            stroke="white" stroke-width="2.175" stroke-linecap="square"/>
-                        <path d="M10.1992 11.7224V11.5774M21.7992 11.7224V11.5774" stroke="white" stroke-width="2.175"
-                              stroke-linecap="square"/>
+                            stroke="white" strokeWidth="2.175" strokeLinecap="square"/>
+                        <path d="M10.1992 11.7224V11.5774M21.7992 11.7224V11.5774" stroke="white" strokeWidth="2.175"
+                              strokeLinecap="square"/>
                         <path
                             d="M21.7992 18.8999C21.0742 21.0749 19.2037 23.2499 15.9992 23.2499C12.7947 23.2499 10.9242 21.0749 10.1992 18.8999"
-                            stroke="white" stroke-width="2.175" stroke-linecap="square"/>
+                            stroke="white" strokeWidth="2.175" strokeLinecap="square"/>
                     </g>
                     <defs>
                         <clipPath id="clip0_2720_1153">

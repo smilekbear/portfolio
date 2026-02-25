@@ -29,7 +29,8 @@ const GridCardComponent = ({items, onPopUpOpen} : Props) => {
                     onClick={(e) => onClickCard(e, item)}
                     className="relative cursor-pointer flex flex-col justify-center items-center gap-[1.39vh] rounded-[18.27px] h-[31.57vh] w-[28.86vw] overflow-hidden group transition-transform hover:scale-[1.02]"
                     style={{
-                        backgroundImage: `linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url("${item.thumbnailUrl}")`,
+                        // backgroundImage: `linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url("${item.thumbnailUrl}")`,
+                        backgroundImage: `url("${item.thumbnailUrl}")`,
                         backgroundSize: "cover",
                         backgroundRepeat: "no-repeat",
                         backgroundPosition: "center",

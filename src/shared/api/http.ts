@@ -72,8 +72,8 @@ export async function http<T>(
           ).toString()
         : ""
 
-    // const fullUrl = `${BASE_URL}${url}${qs ? `?${qs}` : ""}`        //LOCAL
-    const fullUrl = `${url}${qs ? `?${qs}` : ""}`        //Server
+    const fullUrl = `${BASE_URL}${url}${qs ? `?${qs}` : ""}`        //LOCAL
+    // const fullUrl = `${url}${qs ? `?${qs}` : ""}`        //Server
 
     const response = await fetch(fullUrl, {
         method,
