@@ -1,41 +1,45 @@
-name: Deploy via SSM (server build)
+name: Frontend Build and Deploy
 
 on:
   push:
-    branches: ["main"]
-
-permissions:
-  id-token: write
-  contents: read
+    branches: [ "main" ] # 본인의 메인 브랜치가 main인지 master인지 꼭 확인하세요!
 
 jobs:
-  deploy:
+  build-and-push:
     runs-on: ubuntu-latest
-    env:
-      AWS_REGION: ap-northeast-2
-      INSTANCE_ID: i-08bf99a0d6dc02e0d
     steps:
-      - name: Configure AWS (OIDC)
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: arn:aws:iam::YOUR_ACCOUNT_ID:role/YOUR_GITHUB_ASSUME_ROLE
-          aws-region: ${{ env.AWS_REGION }}
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Deploy on EC2 via SSM (git pull + build + pm2 reload)
-        run: |
-          aws ssm send-command \
-            --instance-ids "${INSTANCE_ID}" \
-            --document-name "AWS-RunShellScript" \
-            --parameters commands='[
-              "set -euo pipefail",
-              "APP=/home/ubuntu/portfolio",
-              "cd $APP",
-              "git fetch --all",
-              "git reset --hard origin/main",
-              "pnpm install --frozen-lockfile",
-              "pnpm build",
-              "cd $APP/.next/standalone",
-              "pm2 reload portfolio --update-env || pm2 restart portfolio --update-env",
-              "pm2 save",
-              "echo DEPLOY_OK"
-            ]'
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GH_TOKEN }}
+
+      - name: Build and push Frontend Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          # ghcr.io/계정명/레포명:latest 형태로 이미지가 올라갑니다.
+          tags: ghcr.io/${{ github.repository }}:latest
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to AWS via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.REMOTE_IP }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          # 👇 이 부분의 들여쓰기를 확인하세요! (with와 같은 레벨이 아니라 host와 같은 레벨)
+          script: |
+            cd ~/portfolio
+            docker compose pull frontend
+            docker compose up -d frontend
+            docker image prune -f
