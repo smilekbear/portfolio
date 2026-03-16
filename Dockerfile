@@ -1,27 +1,35 @@
-# 1단계: 빌드 (Build stage)
+# 1단계: 빌드 스테이지
 FROM node:20-alpine AS builder
 WORKDIR /app
 
-# pnpm 사용을 위한 설정
 RUN corepack enable
 
 # 의존성 설치
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
-# 소스 코드 복사 및 빌드
+# 소스 복사 및 빌드
 COPY . .
 RUN pnpm build
 
-# 2단계: 실행 (Production stage)
-# Vite 빌드 결과물(dist)을 서빙하기 위해 가벼운 nginx 이미지를 사용합니다.
-FROM nginx:stable-alpine
+# 2단계: 실행 스테이지
+FROM node:20-alpine AS runner
+WORKDIR /app
 
-# 빌드된 정적 파일들을 nginx의 기본 배포 경로로 복사합니다.
-# Vite의 기본 빌드 폴더명은 dist입니다.
-COPY --from=builder /app/dist /usr/share/nginx/html
+ENV NODE_ENV=production
+# Next.js standalone은 기본적으로 3000포트를 사용합니다.
+ENV PORT=3000
 
-# 컨테이너의 80번 포트를 외부에 노출합니다.
-EXPOSE 80
+# 보안을 위해 비루트 사용자 생성
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
-CMD ["nginx", "-g", "daemon off;"]
+# 빌드 결과물 중 실행에 필요한 파일만 골라 담기 (가장 중요!)
+COPY --from=builder /app/public ./public
+COPY --from=builder --chown=appuser:appgroup /app/.next/standalone ./
+COPY --from=builder --chown=appuser:appgroup /app/.next/static ./.next/static
+
+USER appuser
+EXPOSE 3000
+
+# standalone 모드에서는 node server.js로 실행합니다.
+CMD ["node", "server.js"]
