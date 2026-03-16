@@ -11,7 +11,7 @@ export const AboutLayout = () => {
 
                 <div className={'flex flex-1 flex-col gap-[5.56%]'}>
                     <div className={'flex flex-col w-full gap-[1.48148%]'}>
-                        <p className={'text-[#1E35FF] text-[24px] font-bold'}>School~~!.</p>
+                        <p className={'text-[#1E35FF] text-[24px] font-bold'}>School (자동).</p>
                         <div className={'flex gap-[0.5rem]'}>
                             <p className={'text-black font-bold'}>2015.03 - 2021.02</p>
                             <p className={'text-black'}>건국대학교 글로컬 캠퍼스 컴퓨터공학과 졸업</p>
