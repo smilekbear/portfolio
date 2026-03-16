@@ -2,6 +2,7 @@ import React, {useRef} from 'react';
 
 export const RootLayout = () => {
     const videoRef = useRef<HTMLVideoElement | null>(null);
+    //test commit
     return (
         <div
             className="relative flex w-full flex-col h-screen max-h-screen overflow-hidden bg-black pt-[40px]">
